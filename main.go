@@ -23,7 +23,9 @@ import "C"
 
 import (
 	"fmt"
-	"stayawake/icon"
+	"log"
+	"stayawake/icons/disabledicon"
+	"stayawake/icons/enabledicon"
 	"syscall"
 	"time"
 	"unsafe"
@@ -53,7 +55,7 @@ func CreateMutex(name string) (uintptr, error) {
 func main() {
 	_, err := CreateMutex("StayAwake")
 	if err != nil {
-		fmt.Println("Application already running, quitting.")
+		log.Fatal("Application already running, quitting.")
 		return
 	}
 	onExit := func() {
@@ -65,7 +67,7 @@ func main() {
 func onReady() {
 	var enabled bool = true
 	var seconds int = 20
-	systray.SetIcon(icon.Data)
+	systray.SetIcon(enabledicon.Data)
 	systray.SetTitle("Stay Awake")
 	systray.SetTooltip("Stay Awake")
 	mQuitOrig := systray.AddMenuItem("Quit", "Quit the whole app")
@@ -86,7 +88,9 @@ func onReady() {
 				if mChecked.Checked() {
 					mChecked.Uncheck()
 					enabled = false
+					systray.SetIcon(disabledicon.Data)
 				} else {
+					systray.SetIcon(enabledicon.Data)
 					mChecked.Check()
 					enabled = true
 				}
