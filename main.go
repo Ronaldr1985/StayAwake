@@ -26,10 +26,12 @@ import (
 	"log"
 	"stayawake/icons/disabledicon"
 	"stayawake/icons/enabledicon"
+	"strconv"
 	"syscall"
 	"time"
 	"unsafe"
 
+	"github.com/gen2brain/dlgs"
 	"github.com/getlantern/systray"
 )
 
@@ -64,9 +66,21 @@ func main() {
 	systray.Run(onReady, onExit)
 }
 
+func changeIntervalGUI() (enteredseconds int) {
+	entry, _, err := dlgs.Entry("StayAwake", "Seconds between keypresses", "20")
+	if err != nil {
+		panic(err)
+	}
+	entered_seconds, err := strconv.Atoi(entry)
+	if err != nil {
+		log.Println(err)
+	}
+	return entered_seconds
+}
+
 func onReady() {
+	var seconds int = 120
 	var enabled bool = true
-	var seconds int = 20
 	systray.SetIcon(enabledicon.Data)
 	systray.SetTitle("Stay Awake")
 	systray.SetTooltip("Stay Awake")
@@ -81,22 +95,26 @@ func onReady() {
 	go func() {
 		systray.AddSeparator()
 		mChecked := systray.AddMenuItemCheckbox("Enabled", "Check Me", true)
+		mChangeInterval := systray.AddMenuItem("Change Interval", "Change interval")
 
 		for {
 			select {
 			case <-mChecked.ClickedCh:
 				if mChecked.Checked() {
 					mChecked.Uncheck()
-					enabled = false
 					systray.SetIcon(disabledicon.Data)
+					enabled = false
 				} else {
 					systray.SetIcon(enabledicon.Data)
 					mChecked.Check()
 					enabled = true
 				}
+			case <-mChangeInterval.ClickedCh:
+				enabled = false
+				seconds = changeIntervalGUI()
+				enabled = true
 			}
 		}
-
 	}()
 
 	go func() {
