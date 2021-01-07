@@ -93,6 +93,15 @@ func onReady() {
 	}()
 
 	go func() {
+		for {
+			if enabled == true {
+				C.pressKeys()
+			}
+			time.Sleep(time.Duration(seconds) * time.Second)
+		}
+	}()
+
+	go func() {
 		systray.AddSeparator()
 		mChecked := systray.AddMenuItemCheckbox("Enabled", "Check Me", true)
 		mChangeInterval := systray.AddMenuItem("Change Interval", "Change interval")
@@ -117,12 +126,4 @@ func onReady() {
 		}
 	}()
 
-	go func() {
-		for {
-			if enabled == true {
-				C.pressKeys()
-			}
-			time.Sleep(time.Duration(seconds) * time.Second)
-		}
-	}()
 }
