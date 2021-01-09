@@ -67,19 +67,27 @@ func main() {
 }
 
 func changeIntervalGUI() (enteredseconds int) {
-	entry, _, err := dlgs.Entry("StayAwake", "Seconds between keypresses", "20")
-	if err != nil {
-		panic(err)
-	}
-	entered_seconds, err := strconv.Atoi(entry)
-	if err != nil {
-		log.Println(err)
+	var entered_seconds int
+	for true {
+		entry, _, err := dlgs.Entry("StayAwake", "Enter seconds between keypresses:", "20")
+		if err != nil {
+			log.Fatal(err)
+		}
+		entered_seconds, err = strconv.Atoi(entry)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if entered_seconds < 1 {
+			dlgs.Error("StayAwake", "Must enter a number greater than 0")
+		} else {
+			break
+		}
 	}
 	return entered_seconds
 }
 
 func onReady() {
-	var seconds int = 120
+	var seconds int = 20
 	var enabled bool = true
 	systray.SetIcon(enabledicon.Data)
 	systray.SetTitle("Stay Awake")
