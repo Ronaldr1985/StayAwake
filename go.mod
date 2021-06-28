@@ -1,4 +1,4 @@
-module stayawake
+module github.com/ronaldr1985/stayawake
 
 go 1.15
 
