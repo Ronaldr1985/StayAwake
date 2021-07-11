@@ -12,4 +12,4 @@ When you run the application there will be a small eye icon that appears in the 
  
     go build -ldflags="-H windowsgui" 
 
-Note that compiling requires GCC in the PATH variable.
+Please note that to compile, you need to have GCC in your PATH variable.
