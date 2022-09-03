@@ -1,81 +1,30 @@
 package main
 
-/*
-#include <windows.h>
-#include <stdio.h>
-void pressKeys(void) {
-    INPUT inp;
-
-    inp.type = INPUT_KEYBOARD;
-    inp.ki.wScan = 0;
-    inp.ki.time = 0;
-    inp.ki.dwExtraInfo = 0;
-
-    inp.ki.wVk = 0x7D;
-    inp.ki.dwFlags = 0;
-    SendInput(1, &inp, sizeof(INPUT));
-
-    inp.ki.dwFlags = KEYEVENTF_KEYUP;
-    SendInput(1, &inp, sizeof(INPUT));
-}
-*/
-import "C"
-
 import (
 	"fmt"
-	"log"
-	"github.com/ronaldr1985/stayawake/icons/disabledicon"
-	"github.com/ronaldr1985/stayawake/icons/enabledicon"
+	"os"
 	"strconv"
-	"syscall"
 	"time"
-	"unsafe"
+
+	"stayawake/icons/disabledicon"
+	"stayawake/icons/enabledicon"
 
 	"github.com/gen2brain/dlgs"
 	"github.com/getlantern/systray"
+	"github.com/go-vgo/robotgo"
 )
-
-var (
-	kernel32        = syscall.NewLazyDLL("kernel32.dll")
-	procCreateMutex = kernel32.NewProc("CreateMutexW")
-)
-
-func CreateMutex(name string) (uintptr, error) {
-	ret, _, err := procCreateMutex.Call(
-		0,
-		0,
-		uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(name))),
-	)
-	switch int(err.(syscall.Errno)) {
-	case 0:
-		return ret, nil
-	default:
-		return ret, err
-	}
-}
-
-func main() {
-	_, err := CreateMutex("StayAwake")
-	if err != nil {
-		log.Fatal("Application already running, quitting.")
-		return
-	}
-	onExit := func() {
-		return
-	}
-	systray.Run(onReady, onExit)
-}
 
 func changeIntervalGUI() (enteredseconds int) {
 	var entered_seconds int
 	for true {
 		entry, _, err := dlgs.Entry("StayAwake", "Enter seconds between keypresses:", "20")
 		if err != nil {
-			log.Fatal(err)
+			fmt.Fprintln(os.Stderr, "Error when creating window for seconds: ", err)
 		}
 		entered_seconds, err = strconv.Atoi(entry)
 		if err != nil {
-			log.Fatal(err)
+			fmt.Fprintln(os.Stderr, "Atoi failed with error: ", err)
+			entered_seconds = 20
 		}
 		if entered_seconds < 1 {
 			dlgs.Error("StayAwake", "Must enter a number greater than 0")
@@ -86,7 +35,7 @@ func changeIntervalGUI() (enteredseconds int) {
 	return entered_seconds
 }
 
-func onReady() {
+func on_ready() {
 	var seconds int = 20
 	var enabled bool = true
 	systray.SetIcon(enabledicon.Data)
@@ -103,7 +52,9 @@ func onReady() {
 	go func() {
 		for {
 			if enabled == true {
-				C.pressKeys()
+				fmt.Println("Moving mouse")
+				robotgo.MoveRelative(-1, 0)
+				robotgo.MoveRelative(+1, 0)
 			}
 			time.Sleep(time.Duration(seconds) * time.Second)
 		}
@@ -111,7 +62,7 @@ func onReady() {
 
 	go func() {
 		systray.AddSeparator()
-		mChecked := systray.AddMenuItemCheckbox("Enabled", "Check Me", true)
+		mChecked := systray.AddMenuItemCheckbox("Enabled", "Check me", true)
 		mChangeInterval := systray.AddMenuItem("Change Interval", "Change interval")
 
 		for {
@@ -133,5 +84,12 @@ func onReady() {
 			}
 		}
 	}()
+}
 
+func on_exit() {
+	fmt.Println("Cleaning up")
+}
+
+func main() {
+	systray.Run(on_ready, on_exit)
 }
