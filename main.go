@@ -8,6 +8,7 @@ import (
 
 	"stayawake/icons/disabledicon"
 	"stayawake/icons/enabledicon"
+	"stayawake/utils/checkrunning"
 
 	"github.com/gen2brain/dlgs"
 	"github.com/getlantern/systray"
@@ -16,6 +17,7 @@ import (
 
 func changeIntervalGUI() (enteredseconds int) {
 	var entered_seconds int
+
 	for true {
 		entry, _, err := dlgs.Entry("StayAwake", "Enter seconds between keypresses:", "20")
 		if err != nil {
@@ -38,6 +40,7 @@ func changeIntervalGUI() (enteredseconds int) {
 func on_ready() {
 	var seconds int = 20
 	var enabled bool = true
+
 	systray.SetIcon(enabledicon.Data)
 	systray.SetTitle("Stay Awake")
 	systray.SetTooltip("Stay Awake")
@@ -91,5 +94,14 @@ func on_exit() {
 }
 
 func main() {
-	systray.Run(on_ready, on_exit)
+	running, err := checkrunning.IsRunning("stayawake")
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Failed to determine if app already running")
+		os.Exit(1)
+	}
+	if running {
+		dlgs.Error("StayAwake", "StayAwake is already running")
+	} else {
+		systray.Run(on_ready, on_exit)
+	}
 }
