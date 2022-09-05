@@ -9,10 +9,10 @@ import (
 	"stayawake/icons/disabledicon"
 	"stayawake/icons/enabledicon"
 	"stayawake/utils/checkrunning"
+	"stayawake/utils/presskey"
 
 	"github.com/gen2brain/dlgs"
 	"github.com/getlantern/systray"
-	"github.com/go-vgo/robotgo"
 )
 
 func changeIntervalGUI() (enteredseconds int) {
@@ -55,9 +55,7 @@ func on_ready() {
 	go func() {
 		for {
 			if enabled == true {
-				fmt.Println("Moving mouse")
-				robotgo.MoveRelative(-1, 0)
-				robotgo.MoveRelative(+1, 0)
+				presskey.PressKey(0x7C)
 			}
 			time.Sleep(time.Duration(seconds) * time.Second)
 		}
