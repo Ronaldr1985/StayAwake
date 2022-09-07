@@ -55,7 +55,7 @@ func on_ready() {
 	go func() {
 		for {
 			if enabled == true {
-				presskey.PressKey(0x7C)
+				presskey.PressKey(presskey.KEY_F13)
 			}
 			time.Sleep(time.Duration(seconds) * time.Second)
 		}
