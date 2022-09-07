@@ -11,6 +11,8 @@ package presskey
 #include <X11/keysym.h>
 #include <X11/extensions/XTest.h>
 
+typedef short keycode;
+
 void pressKey(int key)
 {
 	Display *display = XOpenDisplay(NULL);
@@ -23,8 +25,6 @@ void pressKey(int key)
 }
 */
 import "C"
-
-type keycode C.int
 
 const (
 	KEY_0   C.int = 1
