@@ -17,7 +17,7 @@ func onReady() {
 	systray.SetTooltip("Stay Awake")
 	systray.AddSeparator()
 	mEnabled := systray.AddMenuItemCheckbox(
-		"Whether we will keep the screen on", "Whether we should keep the screen on", true,
+		"Enabled", "Whether we should keep the screen on", true,
 	)
 	mQuitOrig := systray.AddMenuItem("Quit", "Quit the whole app")
 	go func() {
