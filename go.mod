@@ -5,7 +5,7 @@ go 1.21.3
 require (
 	github.com/gen2brain/dlgs v0.0.0-20220603100644-40c77870fa8d
 	github.com/getlantern/systray v1.2.2
-	github.com/ronaldr1985/stayawake v0.0.0-20220903185106-c60aabbcbd80
+	github.com/ronaldr1985/stayawake v0.0.0-20231031143420-c68f2c395815
 )
 
 require (
