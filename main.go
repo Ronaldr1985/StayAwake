@@ -34,6 +34,8 @@ func onReady() {
 				fmt.Println("Pressing key")
 
 				PressKey("F24")
+
+				nextTimeToPressKeys = time.Now()
 			}
 		}
 	}()
