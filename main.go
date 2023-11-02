@@ -15,17 +15,68 @@ import (
 	"github.com/gen2brain/beeep"
 	"github.com/getlantern/systray"
 	"github.com/ncruces/zenity"
+	ge "github.com/ronaldr1985/graceful-exit"
+	"gopkg.in/yaml.v3"
 )
 
+const (
+	DEFAULT_TIME_INBETWEEN_NOTIFICATIONS = 20 * time.Minute
+	ALERT_NOTIFICATION_ICON_URL          = ""
+	DEFAULT_CONFIG_FILE                  = "Interval: 20\nDarkTheme: true"
+)
+
+type Config struct {
+	Interval  int  `yaml:"Interval"`
+	DarkTheme bool `yaml:"DarkTheme"`
+}
+
+var (
+	DEFAULT_UNIX_DIRECTORY    = os.Getenv("HOME") + "/.config/StayAwake/" // Think of this as const
+	DEFAULT_WINDOWS_DIRECTORY = os.Getenv("LOCALAPPDATA") + "/StayAwake/" // Think of this as const
+	AlertNotificationIcon     = ""
+	ConfigFile                = ""
+	ProgramConfig             Config
+)
+
+func CheckIfFileExists(filename string) bool {
+	if _, err := os.Stat(filename); err == nil {
+		return true
+	} else if errors.Is(err, os.ErrNotExist) {
+		return false
+	} else {
+		return false
+	}
+}
+
+func ReadConfig(filename string) (Config, error) {
+	config := &Config{}
+
+	bytes, err := os.ReadFile(filename)
+	if err != nil {
+		return *config, err
+	}
+
+	err = yaml.Unmarshal(bytes, config)
+	if err != nil {
+		return *config, fmt.Errorf("in file %q: %w", filename, err)
+	}
+
+	return *config, err
+}
+
 func onReady() {
-	var seconds int = 20
 	var enabled bool = true
+	var disabledIcon []byte
 	systray.SetIcon(enabledicon.Data)
 	systray.SetTitle("Stay Awake")
 	systray.SetTooltip("Stay Awake")
 	mChangeGUI := systray.AddMenuItem(
 		"Change interval", "Change how often a key is pressed",
 	)
+	mDarkTheme := systray.AddMenuItemCheckbox(
+		"Dark Mode", "Use the dark theme for icons", ProgramConfig.DarkTheme,
+	)
+	systray.AddSeparator()
 	mEnabled := systray.AddMenuItemCheckbox(
 		"Enabled", "Whether we should keep the screen on", true,
 	)
@@ -38,6 +89,12 @@ func onReady() {
 		systray.Quit()
 		fmt.Println("Finished quitting")
 	}()
+
+	if ProgramConfig.DarkTheme {
+		disabledIcon = disabledicon.LightIcon
+	} else {
+		disabledIcon = disabledicon.DarkIcon
+	}
 
 	go func() {
 		nextTimeToPressKeys := time.Now().Add(time.Duration(-ProgramConfig.Interval) * time.Second)
@@ -56,7 +113,7 @@ func onReady() {
 			case <-mEnabled.ClickedCh:
 				if mEnabled.Checked() {
 					mEnabled.Uncheck()
-					systray.SetIcon(disabledicon.Data)
+					systray.SetIcon(disabledIcon)
 					enabled = false
 				} else {
 					systray.SetIcon(enabledicon.Data)
