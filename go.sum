@@ -56,6 +56,8 @@ github.com/ronaldr1985/stayawake v0.0.0-20220903185106-c60aabbcbd80 h1:jw2h8MtPu
 github.com/ronaldr1985/stayawake v0.0.0-20220903185106-c60aabbcbd80/go.mod h1:UDjo4zo4P7vcdmjaFi+q8eL7eRArInfgCeEJ5UAISDI=
 github.com/ronaldr1985/stayawake v0.0.0-20231031143420-c68f2c395815 h1:U4f/LFyo2VnlxszRoWxbY60zz0D9sHnt8J9sn9SFCcA=
 github.com/ronaldr1985/stayawake v0.0.0-20231031143420-c68f2c395815/go.mod h1:UDjo4zo4P7vcdmjaFi+q8eL7eRArInfgCeEJ5UAISDI=
+github.com/ronaldr1985/stayawake v0.0.0-20231102161548-c5163ec5be9b h1:uberJgQ5FDspvhSEUpTgQ394zc2ayHjDqh95f2B5LWY=
+github.com/ronaldr1985/stayawake v0.0.0-20231102161548-c5163ec5be9b/go.mod h1:UDjo4zo4P7vcdmjaFi+q8eL7eRArInfgCeEJ5UAISDI=
 github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966/go.mod h1:sUM3LWHvSMaG192sy56D9F7CNvL7jUJVXoqM1QKLnog=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=

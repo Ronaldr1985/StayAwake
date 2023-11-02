@@ -8,7 +8,7 @@ require (
 	github.com/getlantern/systray v1.2.2
 	github.com/micmonay/keybd_event v1.1.2
 	github.com/ncruces/zenity v0.10.10
-	github.com/ronaldr1985/stayawake v0.0.0-20231031143420-c68f2c395815
+	github.com/ronaldr1985/stayawake v0.0.0-20231102161548-c5163ec5be9b
 )
 
 require (
