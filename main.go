@@ -2,26 +2,36 @@ package main
 
 import (
 	"fmt"
-	"github.com/ronaldr1985/stayawake/icons/disabledicon"
-	"github.com/ronaldr1985/stayawake/icons/enabledicon"
+	"os"
+	"strconv"
+	"strings"
 	"time"
 
+	"github.com/ronaldr1985/stayawake/icons/disabledicon"
+	"github.com/ronaldr1985/stayawake/icons/enabledicon"
+
+	"github.com/gen2brain/beeep"
 	"github.com/getlantern/systray"
+	"github.com/ncruces/zenity"
 )
 
 func onReady() {
-	var seconds int64 = 20
+	var seconds int = 20
 	var enabled bool = true
 	systray.SetIcon(enabledicon.Data)
 	systray.SetTitle("Stay Awake")
 	systray.SetTooltip("Stay Awake")
-	systray.AddSeparator()
+	mChangeGUI := systray.AddMenuItem(
+		"Change interval", "Change how often a key is pressed",
+	)
 	mEnabled := systray.AddMenuItemCheckbox(
 		"Enabled", "Whether we should keep the screen on", true,
 	)
-	mQuitOrig := systray.AddMenuItem("Quit", "Quit the whole app")
+	systray.AddSeparator()
+	mQuit := systray.AddMenuItem("Quit", "Quit the whole app")
+
 	go func() {
-		<-mQuitOrig.ClickedCh
+		<-mQuit.ClickedCh
 		fmt.Println("Requesting quit")
 		systray.Quit()
 		fmt.Println("Finished quitting")
@@ -33,7 +43,7 @@ func onReady() {
 			if enabled && time.Since(nextTimeToPressKeys) > time.Duration(seconds)*time.Second {
 				fmt.Println("Pressing key")
 
-				PressKey("F24")
+				PressAndReleaseF24Key()
 
 				nextTimeToPressKeys = time.Now()
 			}
@@ -52,6 +62,37 @@ func onReady() {
 					systray.SetIcon(enabledicon.Data)
 					mEnabled.Check()
 					enabled = true
+				}
+			case <-mChangeGUI.ClickedCh:
+				for {
+					entered_seconds, err := zenity.Entry(
+						"Enter a number of seconds",
+						zenity.Title("StayAwake, enter a number of seconds"),
+					)
+
+					if err != nil {
+						if strings.Contains(err.Error(), "not found") {
+							err := beeep.Alert(
+								"Error",
+								"Error: Zenity is not installed, please install Zenity if you wish to use the change interval GUI",
+								"assets/warning.png",
+							)
+							if err != nil {
+								fmt.Fprintln(os.Stderr, "Failed to send alert failed with:", err)
+							}
+
+							fmt.Fprintln(os.Stderr, "Zenity not installed")
+						}
+
+						break
+					}
+
+					if seconds, err = strconv.Atoi(entered_seconds); err != nil {
+						fmt.Fprintln(os.Stderr, "Failed to convert string to integer...")
+						fmt.Fprintln(os.Stderr, "Got the following error:", err)
+					} else {
+						break
+					}
 				}
 			}
 		}

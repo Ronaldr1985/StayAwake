@@ -32,17 +32,11 @@ int pressKey(const char *key) {
 import "C"
 
 import (
-	"strings"
 	"unsafe"
 )
 
-func PressKey(key string) bool {
-	var keyCode string
-	if strings.Contains(key, "F") {
-		keyCode = "XK_" + key
-	} else {
-		keyCode = key
-	}
+func PressAndReleaseF24Key() bool {
+	keyCode := "XK_F24"
 
 	key_cstr := C.CString(keyCode)
 
