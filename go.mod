@@ -8,7 +8,9 @@ require (
 	github.com/getlantern/systray v1.2.2
 	github.com/micmonay/keybd_event v1.1.2
 	github.com/ncruces/zenity v0.10.10
+	github.com/ronaldr1985/graceful-exit v0.0.0-20231008164643-2a0a815f2cd6
 	github.com/ronaldr1985/stayawake v0.0.0-20231102161548-c5163ec5be9b
+	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 )
 
 require (

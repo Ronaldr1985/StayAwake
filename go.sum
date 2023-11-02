@@ -52,6 +52,8 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/randall77/makefat v0.0.0-20210315173500-7ddd0e42c844 h1:GranzK4hv1/pqTIhMTXt2X8MmMOuH3hMeUR0o9SP5yc=
 github.com/randall77/makefat v0.0.0-20210315173500-7ddd0e42c844/go.mod h1:T1TLSfyWVBRXVGzWd0o9BI4kfoO9InEgfQe4NV3mLz8=
+github.com/ronaldr1985/graceful-exit v0.0.0-20231008164643-2a0a815f2cd6 h1:dNUqKcBufvBB2Dg4wZk4Ib78LZyCI4TCqZT6o8tSx10=
+github.com/ronaldr1985/graceful-exit v0.0.0-20231008164643-2a0a815f2cd6/go.mod h1:89vi+lAGpvIRrTEVC4/96jnRWkynqhtZrqnLGZacn1g=
 github.com/ronaldr1985/stayawake v0.0.0-20220903185106-c60aabbcbd80 h1:jw2h8MtPuHTN58vp6CAqbY4pMc7Siw9sHP0wsJuKRJw=
 github.com/ronaldr1985/stayawake v0.0.0-20220903185106-c60aabbcbd80/go.mod h1:UDjo4zo4P7vcdmjaFi+q8eL7eRArInfgCeEJ5UAISDI=
 github.com/ronaldr1985/stayawake v0.0.0-20231031143420-c68f2c395815 h1:U4f/LFyo2VnlxszRoWxbY60zz0D9sHnt8J9sn9SFCcA=
@@ -113,4 +115,5 @@ gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f/go.mod h1:Co6ibVJAznAaIkqp8
 gopkg.in/yaml.v2 v2.2.2/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
 gopkg.in/yaml.v2 v2.2.8 h1:obN1ZagJSUGI0Ek/LBmuj4SNLPfIny3KsKFopxRdj10=
 gopkg.in/yaml.v2 v2.2.8/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
+gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c h1:dUUwHk2QECo/6vqA44rthZ8ie2QXMNeKRTHCNY2nXvo=
 gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
