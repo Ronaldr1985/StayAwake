@@ -48,6 +48,23 @@ func CheckIfFileExists(filename string) bool {
 	}
 }
 
+func WriteConfig(filename string, config Config) error {
+	file, err := os.OpenFile(filename, os.O_RDWR, 0600)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	yamlEncoder := yaml.NewEncoder(file)
+
+	err = yamlEncoder.Encode(config)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func ReadConfig(filename string) (Config, error) {
 	config := &Config{}
 
@@ -121,12 +138,6 @@ func onReady() {
 					enabled = true
 				}
 			case <-mChangeGUI.ClickedCh:
-				file, fileError := os.OpenFile(ConfigFile, os.O_RDWR, 0600)
-				if fileError != nil {
-					fmt.Fprintln(os.Stderr, "Failed to open file")
-				}
-				defer file.Close()
-
 				for {
 					entered_seconds, err := zenity.Entry(
 						"Enter a number of seconds",
@@ -158,14 +169,7 @@ func onReady() {
 					}
 				}
 
-				if fileError == nil {
-					yamlEncoder := yaml.NewEncoder(file)
-
-					err := yamlEncoder.Encode(ProgramConfig)
-					if err != nil {
-						fmt.Fprintln(os.Stderr, "Failed to write to config file")
-					}
-				}
+				WriteConfig(ConfigFile, ProgramConfig)
 			case <-mDarkTheme.ClickedCh:
 				if mDarkTheme.Checked() {
 					mDarkTheme.Uncheck()
@@ -174,9 +178,14 @@ func onReady() {
 					mDarkTheme.Check()
 					disabledIcon = disabledicon.DarkIcon
 				}
+
 				if !enabled {
 					systray.SetIcon(disabledIcon)
 				}
+
+				ProgramConfig.DarkTheme = !ProgramConfig.DarkTheme
+
+				WriteConfig(ConfigFile, ProgramConfig)
 			}
 		}
 	}()
