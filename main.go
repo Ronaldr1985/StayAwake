@@ -169,10 +169,10 @@ func onReady() {
 			case <-mDarkTheme.ClickedCh:
 				if mDarkTheme.Checked() {
 					mDarkTheme.Uncheck()
-					disabledIcon = disabledicon.DarkIcon
+					disabledIcon = disabledicon.LightIcon
 				} else {
 					mDarkTheme.Check()
-					disabledIcon = disabledicon.LightIcon
+					disabledIcon = disabledicon.DarkIcon
 				}
 				if !enabled {
 					systray.SetIcon(disabledIcon)
