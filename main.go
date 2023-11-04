@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ronaldr1985/stayawake/icons/disabledicon"
-	"github.com/ronaldr1985/stayawake/icons/enabledicon"
+	"github.com/ronaldr1985/StayAwake/icons/disabledicon"
+	"github.com/ronaldr1985/StayAwake/icons/enabledicon"
 
 	"github.com/gen2brain/beeep"
 	"github.com/getlantern/systray"
