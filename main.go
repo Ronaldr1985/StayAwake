@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"runtime"
 	"strconv"
 	"strings"
@@ -189,11 +190,26 @@ func onReady() {
 			}
 		}
 	}()
-
 }
 
 func main() {
 	ge.HandleSignals(false)
+
+	if running, err := IsRunning(filepath.Base(os.Args[0])); running {
+		beeep.Alert(
+			"Error",
+			"Error: StayAwake is already running",
+			"assets/warning.png",
+		)
+
+		fmt.Fprintln(os.Stderr, "StayAwake is already running")
+
+		os.Exit(0)
+	} else if err != nil {
+		fmt.Fprintln(os.Stderr, "Failed to check if StayAwake is already running")
+
+		os.Exit(1)
+	}
 
 	ProgramConfig.Interval = int(DEFAULT_TIME_INBETWEEN_NOTIFICATIONS)
 
