@@ -3,6 +3,8 @@ package main
 import (
 	"errors"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -22,7 +24,7 @@ import (
 
 const (
 	DEFAULT_TIME_INBETWEEN_NOTIFICATIONS = 20 * time.Minute
-	ALERT_NOTIFICATION_ICON_URL          = ""
+	ALERT_NOTIFICATION_ICON_URL          = "https://raw.githubusercontent.com/Ronaldr1985/StayAwake/master/assets/WarningSymbol.png"
 	DEFAULT_CONFIG_FILE                  = "Interval: 20\nDarkTheme: true"
 )
 
@@ -38,6 +40,25 @@ var (
 	ConfigFile                = ""
 	ProgramConfig             Config
 )
+
+func DownloadFile(filename, url string) bool {
+	out, err := os.Create(filename)
+	if err != nil {
+		return false
+	}
+	defer out.Close()
+
+	resp, err := http.Get(url)
+	if err != nil {
+		out.Close()
+		os.Remove(filename)
+		return false
+	}
+	defer resp.Body.Close()
+
+	_, err = io.Copy(out, resp.Body)
+	return err == nil
+}
 
 func CheckIfFileExists(filename string) bool {
 	if _, err := os.Stat(filename); err == nil {
@@ -275,6 +296,17 @@ func main() {
 		f.Close()
 
 		fmt.Println("Written default config to ", ConfigFile)
+	}
+
+	AlertNotificationIcon = appDirectory + "AlertNotificationIcon.png"
+	if fileExists := CheckIfFileExists(AlertNotificationIcon); !fileExists {
+		fmt.Println("Download image for alert notifications")
+		ok := DownloadFile(AlertNotificationIcon, ALERT_NOTIFICATION_ICON_URL)
+		if !ok {
+			fmt.Fprintln(os.Stderr, "Failed to download image for alert notifications")
+		} else {
+			fmt.Println("Downloaded image for alert notitications")
+		}
 	}
 
 	var err error
