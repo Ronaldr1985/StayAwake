@@ -171,7 +171,7 @@ func onReady() {
 							err := beeep.Alert(
 								"Error",
 								"Error: Zenity is not installed, please install Zenity if you wish to use the change interval GUI",
-								"assets/warning.png",
+								AlertNotificationIcon,
 							)
 							if err != nil {
 								fmt.Fprintln(os.Stderr, "Failed to send alert failed with:", err)
@@ -215,22 +215,6 @@ func onReady() {
 
 func main() {
 	ge.HandleSignals(false)
-
-	if running, err := IsRunning(filepath.Base(os.Args[0])); running {
-		beeep.Alert(
-			"Error",
-			"Error: StayAwake is already running",
-			"assets/warning.png",
-		)
-
-		fmt.Fprintln(os.Stderr, "StayAwake is already running")
-
-		os.Exit(0)
-	} else if err != nil {
-		fmt.Fprintln(os.Stderr, "Failed to check if StayAwake is already running")
-
-		os.Exit(1)
-	}
 
 	ProgramConfig.Interval = int(DEFAULT_TIME_INBETWEEN_NOTIFICATIONS)
 
@@ -313,6 +297,22 @@ func main() {
 	ProgramConfig, err = ReadConfig(ConfigFile)
 	if err != nil {
 		panic("Failed to read config file")
+	}
+
+	if running, err := IsRunning(filepath.Base(os.Args[0])); running {
+		beeep.Alert(
+			"Error",
+			"Error: StayAwake is already running",
+			AlertNotificationIcon,
+		)
+
+		fmt.Fprintln(os.Stderr, "StayAwake is already running")
+
+		os.Exit(0)
+	} else if err != nil {
+		fmt.Fprintln(os.Stderr, "Failed to check if StayAwake is already running")
+
+		os.Exit(1)
 	}
 
 	onExit := func() {
